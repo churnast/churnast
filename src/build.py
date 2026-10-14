@@ -174,12 +174,17 @@ class Dragon:
         (x0, y0), (x1, y1) = P[0], P[2]
         return x0, y0, math.degrees(math.atan2(y0 - y1, x0 - x1))
 
-    def svg(self, t, dur=6, frames=12, uid="d", head_scale=1.0, head_extra="", fire="", sync=None):
+    def svg(self, t, dur=6, frames=12, uid="d", head_scale=1.0, head_extra="", fire="", sync=None, counter=None):
         F = [self.frame(2 * math.pi * k / frames) for k in range(frames)]
         col = lambda key: [f[key] for f in F]
         hx, hy, ang = self.head_pose()
         rim = f'stroke="{t["rim"]}" stroke-width="1.6" stroke-linejoin="round"'
-        flipy = -1 if self.flip < 0 else 1
+        # keep the head upright: never mirrored vertically, at most 20 degrees off horizontal
+        if math.cos(math.radians(ang)) >= 0:
+            rot, sx = max(-20, min(20, (ang + 180) % 360 - 180)), head_scale
+        else:
+            rot, sx = max(-20, min(20, (ang % 360) - 180)), -head_scale
+        cnt = f' class="{counter}"' if counter else ""
         return f"""<g>
 {anim_path(col("legs"), dur, f'fill="none" stroke="{t["ink"]}" stroke-width="12" stroke-linecap="round"')}
 {anim_path(col("claws"), dur, f'fill="none" stroke="{t["ink"]}" stroke-width="3.2" stroke-linecap="round"')}
@@ -187,7 +192,7 @@ class Dragon:
 {anim_path(col("tuft"), dur, f'fill="none" stroke="{t["ink"]}" stroke-width="4" stroke-linecap="round"')}
 {anim_path(col("body"), dur, f'fill="{t["ink"]}" {rim}')}
 {anim_path(col("scales"), dur, f'fill="none" stroke="{t["cut"]}" stroke-width="1.7" stroke-linecap="round"')}
-<g transform="translate({hx:.1f} {hy:.1f}) rotate({ang:.1f}) scale({head_scale} {head_scale * flipy})"><g class="{("tilt" + sync) if sync else "nod"}">{head(t, uid, dur, fire, sync)}</g></g>
+<g transform="translate({hx:.1f} {hy:.1f})"><g{cnt}><g transform="rotate({rot:.1f}) scale({sx} {head_scale})"><g class="{("tilt" + sync) if sync else "nod"}">{head(t, uid, dur, fire, sync)}</g></g></g></g>
 </g>"""
 
 
@@ -550,6 +555,8 @@ def hello():
     css = f"""
 .loop{{animation:loop 4s cubic-bezier(.55,.05,.35,1) infinite}}
 @keyframes loop{{0%{{transform:rotate(0deg)}}62%,100%{{transform:rotate(360deg)}}}}
+.cnt{{animation:cnt 4s cubic-bezier(.55,.05,.35,1) infinite}}
+@keyframes cnt{{0%{{transform:rotate(0deg)}}62%,100%{{transform:rotate(-360deg)}}}}
 .breath{{transform-box:fill-box;transform-origin:0% 50%;animation:breath 4s infinite}}
 @keyframes breath{{0%,62%{{opacity:0;transform:scaleX(.1)}}70%{{opacity:1;transform:scaleX(1)}}88%{{opacity:1;transform:scaleX(1.08)}}96%,100%{{opacity:0;transform:scaleX(.2)}}}}
 .jawH{{transform-box:fill-box;transform-origin:0% 0%;animation:jawH 4s infinite}}
@@ -566,7 +573,7 @@ def hello():
 {sun(uid, t, SX, SY, 92)}
 {splatter(41, SX, SY, 104, t["sun"], 26, 6)}
 {smoke([(80, 80, 1, 0), (540, 300, 1.1, -2.5), (560, 70, .9, -1)], t["smoke"])}
-<g transform="translate({SX} {SY})"><g class="loop">{dr.svg(t, uid=uid, dur=4, head_scale=1.15, fire=breath, sync="H")}</g></g>
+<g transform="translate({SX} {SY})"><g class="loop">{dr.svg(t, uid=uid, dur=4, head_scale=1.15, fire=breath, sync="H", counter="cnt")}</g></g>
 <g class="burst" transform="translate(560 120)"><path d="{SPARK}" transform="scale(2.4)" fill="{t['sun2']}"/></g>
 {petals(3, W, H, t["sun2"], 12, 5)}
 {seal(W - 64, 20, 40, t)}"""

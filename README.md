@@ -25,7 +25,7 @@ Two plugins for [Hermes Agent](https://hermes-agent.nousresearch.com), the open-
 
 ### hermes-telegram-stickers
 
-<a href="https://github.com/churnast/hermes-telegram-stickers"><img src="assets/telegram-stickers.svg" width="100%" alt="Telegram Stickers for Hermes Agent: an ink dragon on a red sun brings a sticker as a reply to I GOT THE JOB."></a>
+<a href="https://github.com/churnast/hermes-telegram-stickers"><img src="https://github.com/churnast/hermes-telegram-stickers/raw/main/docs/demo.webp" width="100%" alt="Telegram Stickers demo: in Telegram test chats the agent answers happy news with a kitten sticker, a smug cat with a smug kitten, and sometimes answers with words instead of a sticker."></a>
 
 Lets your Hermes agent answer with Telegram stickers: default packs out of the box or packs you choose, picked by emoji or by meaning, sent as a reply in the right topic, paced like a person.
 
@@ -42,7 +42,7 @@ hermes gateway restart
 
 ### hermes-memory-shield
 
-<a href="https://github.com/churnast/hermes-memory-shield"><img src="assets/memory-shield.svg" width="100%" alt="Memory Shield for Hermes Agent: an ink dragon coils around the memory file USER.md and burns a 'forget everything' message."></a>
+<a href="https://github.com/churnast/hermes-memory-shield"><img src="https://github.com/churnast/hermes-memory-shield/raw/main/docs/demo.webp" width="100%" alt="Memory Shield demo: in a group chat a stranger cannot plant a fact about the owner, and in a direct chat 'forget everything' does not wipe memory."></a>
 
 Keeps your Hermes agent from rewriting or wiping what it remembers about you, and from being talked into it in group chats.
 

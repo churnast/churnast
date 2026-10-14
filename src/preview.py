@@ -6,7 +6,13 @@ import base64, html, re, sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
-MIME = {".svg": "image/svg+xml", ".gif": "image/gif", ".png": "image/png"}
+MIME = {".svg": "image/svg+xml", ".gif": "image/gif", ".png": "image/png", ".webp": "image/webp"}
+
+
+def remote_uri(url):
+    import urllib.request
+    data = urllib.request.urlopen(url).read()
+    return f"data:{MIME[Path(url).suffix]};base64,{base64.b64encode(data).decode()}"
 
 
 def data_uri(rel):
@@ -69,6 +75,7 @@ def render(md):
                 f'<img class="only-light" src="{light}" width="100%" alt="{alt}">')
     h = re.sub(r"<picture>.*?</picture>", pic, h, flags=re.S)
     h = re.sub(r'src="(assets/[^"]+)"', lambda m: f'src="{data_uri(m.group(1))}"', h)
+    h = re.sub(r'src="(https://github\.com/churnast/[^"]+/raw/[^"]+)"', lambda m: f'src="{remote_uri(m.group(1))}"', h)
     h = h.replace('href="src/build.py"', 'href="#"')
     h = re.sub(r'<a href="(https?://[^"]+)"', r'<a href="\1" target="_blank" rel="noopener"', h)
     return h
