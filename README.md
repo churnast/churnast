@@ -10,7 +10,7 @@
 
 AI automation engineer based in Thailand. I think the product through, build it with Claude Code and watch people use it every day.
 
-<p align="center"><img src="assets/hello.gif" width="420" alt="An ink dragon loops around a red sun and breathes red fire."></p>
+<p align="center"><img src="assets/hello.svg" width="100%" alt="An ink dragon loops around a red sun and breathes red fire."></p>
 
 ## What I've built
 
