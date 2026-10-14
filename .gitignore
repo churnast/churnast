@@ -1,0 +1,6 @@
+src/*.ttf
+src/fonts/
+__pycache__/
+about-draft-ru.md
+about-sources.md
+.DS_Store
